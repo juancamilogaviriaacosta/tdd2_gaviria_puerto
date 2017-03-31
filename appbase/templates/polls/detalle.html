@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Independiente</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
+    <script src="/designMatch/recursos/jquery.bootpag.min.js"></script>
+    <script>
+        var trabajador = localStorage.getItem('trabajador');
+
+        (function () {
+            $.getJSON("/trabajador/" + trabajador).done(function (data) {
+                $.each(data, function (key, val) {
+                    $('#nombres').prepend('<h2>' + val.fields.nombre + ' ' + val.fields.apellidos + '</h2>');
+                    $('#foto').prepend('<a><img src="https://miso4202.s3.amazonaws.com/' + val.fields.imagen + '" class="media-object" style="width: 250px; height: 300px"></a>');
+                    $('#detalle').prepend('<br><br><br>' +
+                            '<h4><b>Experiencia: </b>' + val.fields.aniosExperiencia + ' años</h4><br>' +
+                            '<h4><b>Telefono: </b>' + val.fields.telefono + '</h4><br>' +
+                            '<h4><b>Correo electrónico: </b>' + val.fields.correo + '</h4>');
+                })
+            });
+        })();
+
+        mostrarComentarios();
+        function mostrarComentarios(){
+            $.getJSON("/mostrarComentarios/" + trabajador).done(function (data) {
+                $.each(data, function (key, val) {
+
+                    var div='<div style="box-shadow: 2px 2px 5px gray; border-radius: 5px" class="col-md-6 col-md-offset-3">'+
+                                  '<h4>'+val.fields.correo+'</h4>'+
+                                  '<p>'+val.fields.texto+'</p></div>';
+                  $('#comentarios').append(div);
+                })
+            });
+        }
+
+
+        function agregarComentario(){
+            $.post( "/addComment", { texto: $('#comentario').val(), trabajador: trabajador, correo: $('#correo').val() })
+              .done(function( data ) {
+                  mostrarComentarios();
+              });
+        }
+    </script>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div id="nombres" align="center" class="page-header">
+        </div>
+        <div class="media">
+            <div id="foto" class="media-left media-middle">
+            </div>
+            <div id="detalle" style="padding-left: 1em" class="media-body">
+            </div>
+        </div>
+        <div align="center" class="page-header">
+            <h2>Comentarios</h2>
+        </div>
+        <div align="right">
+            <a href="/" class="btn btn-default btn-default"><span
+                    class="glyphicon glyphicon-step-backward">Volver</span></a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div style="box-shadow: 2px 2px 5px gray; border-radius: 5px" class="col-md-6 col-md-offset-3">
+        <form onsubmit="agregarComentario()">
+         <input id="correo" style="margin: 5px;" type="email" required placeholder="Correo">
+         <textarea placeholder="Agreagar comentario" id="comentario" style="margin: 5px;" rows="3" cols="90" required></textarea>
+
+        <button type="submit" style="margin: 5px;" class="btn btn-default btn-success" title="Adicionar comentario">Comentar <span class="glyphicon glyphicon-plus"></span>
+        </button>
+        </form>
+
+     </div>
+    </div>
+    <div id="comentarios" class="row">
+</div>
+</body>
+</html>

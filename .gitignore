@@ -87,3 +87,16 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+
+# Ignorar __pycache__
+/__pycache__
+/tdd2_gaviria_puerto/__pycache__
+/tdd2_gaviria_puerto/__pycache__/*
+
+# Ignorar binarios de Python
+*.pyc
+
+#Ignorar archivos de PyCharm
+.idea
+.idea/*
