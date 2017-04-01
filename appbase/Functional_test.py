@@ -1,4 +1,4 @@
-__author__ = 'asistente'
+from __future__ import absolute_import
 from unittest import TestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 class FunctionalTest(TestCase):
 
     def setUp(self):
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.Chrome()
         self.browser.implicitly_wait(2)
 
     def tearDown(self):
@@ -37,8 +37,8 @@ class FunctionalTest(TestCase):
         correo = self.browser.find_element_by_id('id_correo')
         correo.send_keys('jd.patino1@uniandes.edu.co')
 
-        imagen = self.browser.find_element_by_id('id_imagen')
-        imagen.send_keys('C:\Users\asistente\Desktop\developer.jpg')
+        #imagen = self.browser.find_element_by_id('id_imagen')
+        #imagen.send_keys('C:\Users\asistente\Desktop\developer.jpg')
 
         nombreUsuario = self.browser.find_element_by_id('id_username')
         nombreUsuario.send_keys('juan645')
