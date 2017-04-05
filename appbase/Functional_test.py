@@ -84,3 +84,4 @@ class FunctionalTest(TestCase):
 
         self.browser.implicitly_wait(3)
         self.assertIn('Juan Daniel Arevalo', label_usuario)
+        
