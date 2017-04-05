@@ -52,3 +52,4 @@ class FunctionalTest(TestCase):
         span=self.browser.find_element(By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
 
         self.assertIn('Juan Daniel Arevalo', span.text)
+        
