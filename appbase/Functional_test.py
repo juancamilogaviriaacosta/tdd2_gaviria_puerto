@@ -15,11 +15,11 @@ class FunctionalTest(TestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def test_title(self):
+    def test_1_title(self):
         self.browser.get('http://localhost:8000')
         self.assertIn('Busco Ayuda', self.browser.title)
 
-    def test_registro(self):
+    def test_2_registro(self):
         self.browser.get('http://localhost:8000')
         link = self.browser.find_element_by_id('id_register')
         link.click()
@@ -42,7 +42,7 @@ class FunctionalTest(TestCase):
         correo.send_keys('jd.patino1@uniandes.edu.co')
 
         imagen = self.browser.find_element_by_id('id_imagen')
-        imagen.send_keys('C:/Users/Santiago/Pictures/Saved Pictures/a.png')
+        imagen.send_keys('/home/juan/Escritorio/persona.jpg')
 
         nombreUsuario = self.browser.find_element_by_id('id_username')
         nombreUsuario.send_keys('juan645')
@@ -57,7 +57,7 @@ class FunctionalTest(TestCase):
 
         self.assertIn('Juan Daniel Arevalo', span.text)
 
-    def test_verDetalle(self):
+    def test_3_verDetalle(self):
         self.browser.get('http://localhost:8000')
         span = self.browser.find_element(By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
         span.click()
@@ -66,16 +66,16 @@ class FunctionalTest(TestCase):
 
         self.assertIn('Juan Daniel Arevalo', h2.text)
 
-    def test_login(self):
+    def test_4_login(self):
         self.browser.get('http://localhost:8000')
         link = self.browser.find_element_by_id('id_login')
         link.click()
         self.browser.implicitly_wait(10)
 
-        login_usuario = self.browser.find_element_by_id('id_username')
+        login_usuario = self.browser.find_element_by_id('id_username_login')
         login_usuario.send_keys('juan645')
 
-        login_clave = self.browser.find_element_by_id('id_password')
+        login_clave = self.browser.find_element_by_id('id_password_login')
         login_clave.send_keys('clave123')
 
         botonIngresar = self.browser.find_element_by_id('btn_login')

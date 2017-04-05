@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import TiposDeServicio
+from .models import TiposDeServicio, LoginForm
 from .models import Trabajador, TrabajadorForm, UserForm, Comentario
 
 
@@ -18,7 +18,7 @@ def index(request):
     tipos_de_servicios = TiposDeServicio.objects.all()
     form_trabajador = TrabajadorForm(request.POST)
     form_usuario = UserForm(request.POST)
-    form_login = UserForm(request.POST)
+    form_login = LoginForm(request.POST)
 
     context = {'trabajadores': trabajadores, 'tipos_de_servicios': tipos_de_servicios,
                'form_trabajador': form_trabajador, 'form_usuario': form_usuario, 'base_url': settings.STATIC_URL,
@@ -27,14 +27,14 @@ def index(request):
 
 
 def login(request):
-    form_login = UserForm()
+    form_login = LoginForm()
 
     if request.method == 'POST':
 
-        form_login = UserForm(request.POST)
+        form_login = LoginForm(request.POST)
 
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get('username_login')
+        password = request.POST.get('password_login')
 
         user = auth.authenticate(username=username, password=password)
 

@@ -10,14 +10,14 @@
                 {% csrf_token %}
                 <div class="modal-body">
                     {% for field in form_login %}
-                    <div class="form-group">
-                        {{ field.label_tag }}
-                        {{ field }}
-                    </div>
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
                     {%  endfor %}
                 </div>
                 <div class="modal-footer btn-toolbar">
-                    <button type="submit"id="btn_login" class="btn btn-default btn-success pull-right">
+                    <button type="submit" id="btn_login" class="btn btn-default btn-success pull-right">
                         <span class="glyphicon glyphicon-save"></span> Ingresar
                     </button>
                     <button type="submit" class="btn btn-default btn-default pull-right" data-dismiss="modal"
