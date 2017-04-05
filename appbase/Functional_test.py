@@ -1,10 +1,12 @@
 from __future__ import absolute_import
+
 from unittest import TestCase
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-class FunctionalTest(TestCase):
 
+class FunctionalTest(TestCase):
     def setUp(self):
         self.browser = webdriver.Chrome()
         self.browser.implicitly_wait(2)
@@ -30,7 +32,8 @@ class FunctionalTest(TestCase):
         experiencia = self.browser.find_element_by_id('id_aniosExperiencia')
         experiencia.send_keys('5')
 
-        self.browser.find_element_by_xpath("//select[@id='id_tiposDeServicio']/option[text()='Desarrollador Web']").click()
+        self.browser.find_element_by_xpath(
+            "//select[@id='id_tiposDeServicio']/option[text()='Desarrollador Web']").click()
         telefono = self.browser.find_element_by_id('id_telefono')
         telefono.send_keys('3173024578')
 
@@ -38,7 +41,7 @@ class FunctionalTest(TestCase):
         correo.send_keys('jd.patino1@uniandes.edu.co')
 
         imagen = self.browser.find_element_by_id('id_imagen')
-        imagen.send_keys('/home/juan/Escritorio/persona.jpg')
+        imagen.send_keys('C:/Users/Santiago/Pictures/Saved Pictures/a.png')
 
         nombreUsuario = self.browser.find_element_by_id('id_username')
         nombreUsuario.send_keys('juan645')
@@ -49,15 +52,35 @@ class FunctionalTest(TestCase):
         botonGrabar = self.browser.find_element_by_id('id_grabar')
         botonGrabar.click()
         self.browser.implicitly_wait(3)
-        span=self.browser.find_element(By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
+        span = self.browser.find_element(By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
 
         self.assertIn('Juan Daniel Arevalo', span.text)
 
     def test_verDetalle(self):
         self.browser.get('http://localhost:8000')
-        span=self.browser.find_element(By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
+        span = self.browser.find_element(By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
         span.click()
 
-        h2=self.browser.find_element(By.XPATH, '//h2[text()="Juan Daniel Arevalo"]')
+        h2 = self.browser.find_element(By.XPATH, '//h2[text()="Juan Daniel Arevalo"]')
 
         self.assertIn('Juan Daniel Arevalo', h2.text)
+
+    def test_login(self):
+        self.browser.get('http://localhost:8000')
+
+        login = self.browser.find_element_by_id('id_login')
+        login.click()
+
+        login_usuario = self.browser.find_element_by_id('login_usuario')
+        login_usuario.send_keys('juan645')
+
+        login_clave = self.browser.find_element_by_id('id_password')
+        login_clave.send_keys('clave123')
+
+        botonIngresar = self.browser.find_element_by_id('btn_ingresar')
+        botonIngresar.click()
+
+        label_usuario = self.browser.find_element_by_id('label_usuario')
+
+        self.browser.implicitly_wait(3)
+        self.assertIn('Juan Daniel Arevalo', label_usuario)
