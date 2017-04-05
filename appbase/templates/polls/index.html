@@ -28,6 +28,8 @@
     </style>
 </head>
 <body>
+{% include "polls/login.html" %}
+{% include "polls/registro.html" %}
 <ul class="nav navbar-nav navbar-right" style="padding-right: 20px">
     {% if user.is_authenticated %}
         <li><span class="glyphicon glyphicon-user"></span><label id="username">{{ username }}</label></li>
@@ -97,8 +99,6 @@
         {% endif %}
     </div>
 {% endif %}
-{% include "polls/registro.html" %}
-{% include "polls/login.html" %}
 <!--suppress JSUnresolvedFunction -->
 <script>
     $(document).ready(function () {

@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from unittest import TestCase
 
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 class FunctionalTest(TestCase):
@@ -67,10 +68,9 @@ class FunctionalTest(TestCase):
 
     def test_login(self):
         self.browser.get('http://localhost:8000')
-
-        login = self.browser.find_element_by_id('id_login')
-        login.click()
-        self.browser.implicitly_wait(2)
+        link = self.browser.find_element_by_id('id_login')
+        link.click()
+        self.browser.implicitly_wait(10)
 
         login_usuario = self.browser.find_element_by_id('id_username')
         login_usuario.send_keys('juan645')
@@ -83,4 +83,4 @@ class FunctionalTest(TestCase):
 
         label_usuario = self.browser.find_element_by_id('username')
 
-        self.assertIn('juan645', label_usuario)
+        self.assertIn('juan645', label_usuario.text)
