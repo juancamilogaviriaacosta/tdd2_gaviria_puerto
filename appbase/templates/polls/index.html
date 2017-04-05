@@ -4,7 +4,7 @@
     <title>Busco Ayuda</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -15,6 +15,7 @@
             width: 100%;
             z-index: 9999;
         }
+
         /*noinspection CssUnusedSymbol*/
         .form-group label.error {
             color: #FB3A3A;
@@ -29,9 +30,9 @@
 <body>
 <ul class="nav navbar-nav navbar-right" style="padding-right: 20px">
     {% if user.is_authenticated %}
-
-            <li><a href="{% url 'principal:editar' idTrabajador=user.id %}" id="id_editar"><span class="glyphicon glyphicon-user"></span> Editar</a></li>
-    <li>
+        <li><span class="glyphicon glyphicon-user"></span><label id="username">{{ username }}</label></li>
+        <li><a href="{% url 'principal:editar' idTrabajador=user.id %}" id="id_editar"><span class="glyphicon glyphicon-user"></span> Editar</a></li>
+        <li>
             <a href="logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
         </li>
     {% else %}
@@ -41,7 +42,7 @@
 </ul>
 <div class="jumbotron" style="padding-left: 20px; height: 50%">
     <h1>Busco Ayuda</h1>
-    <p>Encuentra aquí la ayuda que necesitas.</p>
+    <p>Encuentra aquí la ayuda que necesitas</p>
 </div>
 {% if messages %}
     {% for message in messages %}
@@ -57,7 +58,7 @@
 {% if not user.is_authenticated %}
     <form class="navbar-form navbar-right" role="search">
         <div class="input-group">
-            <input  type="text" class="form-control" placeholder="Buscar" name="srch-term" id="buscar">
+            <input type="text" class="form-control" placeholder="Buscar" name="srch-term" id="buscar">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
             </div>
@@ -66,26 +67,26 @@
     <div class="col-lg-12">
     </div>
     <div id="trabajadores">
-    {% for trabajador in trabajadores %}
-        <div class="col-sm-4 col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading" style="text-align: center; background-color: black;">
-                    <span style="color: white; font-size: large;">{{ trabajador.tiposDeServicio.nombre }}</span>
-                    <!--suppress HtmlUnknownTarget -->
-                    <img src="https://miso4202.s3.amazonaws.com/{{ trabajador.tiposDeServicio.imagen }}" />
-                </div>
-                <div class="panel-body" style="text-align: center">
-                    <a class="trabajador" href="#" data-form="{{ trabajador.id }}" style="text-decoration: none;">
+        {% for trabajador in trabajadores %}
+            <div class="col-sm-4 col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="text-align: center; background-color: black;">
+                        <span style="color: white; font-size: large;">{{ trabajador.tiposDeServicio.nombre }}</span>
                         <!--suppress HtmlUnknownTarget -->
-                        <img class="thumbnail img-responsive center-block"
-                             src="https://miso4202.s3.amazonaws.com/{{ trabajador.imagen }}" width="300"
-                             height="300">
-                        <span>{{ trabajador.nombre }} {{ trabajador.apellidos }}</span>
-                    </a>
+                        <img src="https://miso4202.s3.amazonaws.com/{{ trabajador.tiposDeServicio.imagen }}"/>
+                    </div>
+                    <div class="panel-body" style="text-align: center">
+                        <a class="trabajador" href="#" data-form="{{ trabajador.id }}" style="text-decoration: none;">
+                            <!--suppress HtmlUnknownTarget -->
+                            <img class="thumbnail img-responsive center-block"
+                                 src="https://miso4202.s3.amazonaws.com/{{ trabajador.imagen }}" width="300"
+                                 height="300">
+                            <span>{{ trabajador.nombre }} {{ trabajador.apellidos }}</span>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
     </div>
 {% else %}
     <div class="container" style="padding: 5px">
@@ -97,6 +98,7 @@
     </div>
 {% endif %}
 {% include "polls/registro.html" %}
+{% include "polls/login.html" %}
 <!--suppress JSUnresolvedFunction -->
 <script>
     $(document).ready(function () {
@@ -112,50 +114,50 @@
             localStorage.setItem('trabajador', trabajador);
             window.location = "/detail";
         });
-        $('.float-message').fadeTo(2000, 500).slideUp(500, function(){
+        $('.float-message').fadeTo(2000, 500).slideUp(500, function () {
             $('#success-alert').alert('close');
         });
 
-        $("#buscar").keyup(function(){
+        $("#buscar").keyup(function () {
             $('#trabajadores').clear;
             mostrarTrabajadores();
-});
+        });
     });
-    function detalle(id){
-            localStorage.setItem('trabajador', id);
-            window.location = "/detail";
-}
+    function detalle(id) {
+        localStorage.setItem('trabajador', id);
+        window.location = "/detail";
+    }
 
-    function mostrarTrabajadores(){
+    function mostrarTrabajadores() {
 
         $.getJSON("/mostrarTrabajadores/" + $("#buscar").val()).done(function (data) {
             $('#trabajadores').empty();
-                $.each(data, function (key, val) {
-                    $.get( "/tipoServicio/"+val.fields.tiposDeServicio, function( dataTipo ) {
-                        dataTipo=jQuery.parseJSON(dataTipo);
-                      var tipo=dataTipo[0].fields.nombre;
-                      var imagenTipo= dataTipo[0].fields.imagen;
+            $.each(data, function (key, val) {
+                $.get("/tipoServicio/" + val.fields.tiposDeServicio, function (dataTipo) {
+                    dataTipo = jQuery.parseJSON(dataTipo);
+                    var tipo = dataTipo[0].fields.nombre;
+                    var imagenTipo = dataTipo[0].fields.imagen;
 
-                    var div='<div class="col-sm-4 col-md-3">'+
-                            '<div class="panel panel-default">'+
-                                '<div class="panel-heading" style="text-align: center; background-color: black;">'+
-                                    '<span style="color: white; font-size: large;">'+tipo+'</span>'+
-                                    '<img src="https://miso4202.s3.amazonaws.com/'+imagenTipo+'" />'+
-                                '</div>'+
-                                '<div class="panel-body" style="text-align: center">'+
-                                    '<a onclick="detalle('+val.pk+')" class="trabajador" href="#" data-form="'+val.fields.id+'" style="text-decoration: none;">'+
-                                        '<img class="thumbnail img-responsive center-block"'+
-                                             'src="https://miso4202.s3.amazonaws.com/'+val.fields.imagen+'" width="300"'+
-                                             'height="300">'+
-                                        '<span>'+val.fields.nombre+' '+val.fields.apellidos+'</span>'+
-                                    '</a>'+
-                                '</div>'+
-                            '</div>'+
+                    var div = '<div class="col-sm-4 col-md-3">' +
+                        '<div class="panel panel-default">' +
+                        '<div class="panel-heading" style="text-align: center; background-color: black;">' +
+                        '<span style="color: white; font-size: large;">' + tipo + '</span>' +
+                        '<img src="https://miso4202.s3.amazonaws.com/' + imagenTipo + '" />' +
+                        '</div>' +
+                        '<div class="panel-body" style="text-align: center">' +
+                        '<a onclick="detalle(' + val.pk + ')" class="trabajador" href="#" data-form="' + val.fields.id + '" style="text-decoration: none;">' +
+                        '<img class="thumbnail img-responsive center-block"' +
+                        'src="https://miso4202.s3.amazonaws.com/' + val.fields.imagen + '" width="300"' +
+                        'height="300">' +
+                        '<span>' + val.fields.nombre + ' ' + val.fields.apellidos + '</span>' +
+                        '</a>' +
+                        '</div>' +
+                        '</div>' +
                         '</div>';
-                        $('#trabajadores').append(div);
-                    });
-                })
-            });
+                    $('#trabajadores').append(div);
+                });
+            })
+        });
     }
 </script>
 </body>
