@@ -32,7 +32,7 @@
 {% include "polls/login.html" %}
 <ul class="nav navbar-nav navbar-right" style="padding-right: 20px">
     {% if user.is_authenticated %}
-        <li><span class="glyphicon glyphicon-user"></span><label id="username">{{ username }}</label></li>
+        <li><span class="glyphicon glyphicon-user"></span><label id="username">{{ user.trabajador.nombre }}</label></li>
         <li><a href="{% url 'principal:editar' idTrabajador=user.id %}" id="id_editar"><span class="glyphicon glyphicon-user"></span> Editar</a></li>
         <li>
             <a href="logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a>

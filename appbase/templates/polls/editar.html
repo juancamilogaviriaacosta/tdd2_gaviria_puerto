@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Busco Ayuda</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .float-message {
+            position: fixed;
+            top: 1%;
+            width: 100%;
+            z-index: 9999;
+        }
+
+        /*noinspection CssUnusedSymbol*/
+        .form-group label.error {
+            color: #FB3A3A;
+            display: inline-block;
+            text-align: right;
+            width: 100%;
+        }
+
+
+    </style>
+</head>
+
+<body>
+<!--suppress HtmlUnknownTarget -->
+<form role="form" method="post" enctype="multipart/form-data" id="editar-form" novalidate="novalidate">
+    {% csrf_token %}
+    <div class="modal-body">
+        {% for field in form_trabajador %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+            </div>
+        {% endfor %}
+        {% for field in form_usuario %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="modal-footer btn-toolbar">
+        <button type="submit" id="id_editar" class="btn btn-default btn-success pull-right" value="Guardar">
+            <span class="glyphicon glyphicon-save"></span>
+        </button>
+    </div>
+</form>
+</body>
+</html>

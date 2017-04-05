@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from unittest import TestCase
 
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -10,7 +11,7 @@ class FunctionalTest(TestCase):
     def setUp(self):
         self.browser = webdriver.Chrome()
         self.browser.set_window_size(1024, 768)
-        self.browser.implicitly_wait(2)
+        self.browser.implicitly_wait(5000)
 
     def tearDown(self):
         self.browser.quit()
@@ -83,13 +84,12 @@ class FunctionalTest(TestCase):
 
         label_usuario = self.browser.find_element_by_id('username')
 
-        self.assertIn('juan645', label_usuario.text)
+        self.assertIn('Juan Daniel', label_usuario.text)
 
     def test_5_editar(self):
         self.browser.get('http://localhost:8000')
         link = self.browser.find_element_by_id('id_login')
         link.click()
-        self.browser.implicitly_wait(10)
 
         login_usuario = self.browser.find_element_by_id('id_username_login')
         login_usuario.send_keys('juan645')
@@ -98,51 +98,40 @@ class FunctionalTest(TestCase):
         login_clave.send_keys('clave123')
 
         botonIngresar = self.browser.find_element_by_id('btn_login')
-        botonIngresar.click()
+        botonIngresar.submit()
+
+        time.sleep(4)
 
         self.browser.find_element_by_id('id_editar').click()
 
-        self.browser.get('http://localhost:8000')
-        link = self.browser.find_element_by_id('id_register')
-        link.click()
-
         nombre = self.browser.find_element_by_id('id_nombre')
-        nombre.send_keys('Juan Daniel')
+        nombre.clear()
+        nombre.send_keys('Juan Daniel Editado')
 
         apellidos = self.browser.find_element_by_id('id_apellidos')
-        apellidos.send_keys('Arevalo Editado')
+        apellidos.clear()
+        apellidos.send_keys('Arevalo')
 
         experiencia = self.browser.find_element_by_id('id_aniosExperiencia')
+        experiencia.clear()
         experiencia.send_keys('5')
 
         self.browser.find_element_by_xpath("//select[@id='id_tiposDeServicio']/option[text()='Desarrollador Web']").click()
+
         telefono = self.browser.find_element_by_id('id_telefono')
+        telefono.clear()
         telefono.send_keys('3173024578')
 
         correo = self.browser.find_element_by_id('id_correo')
+        correo.clear()
         correo.send_keys('jd.patino1@uniandes.edu.co')
 
         imagen = self.browser.find_element_by_id('id_imagen')
         imagen.send_keys('/home/juan/Escritorio/persona.jpg')
 
-        nombreUsuario = self.browser.find_element_by_id('id_username')
-        nombreUsuario.send_keys('juan645')
-
-        clave = self.browser.find_element_by_id('id_password')
-        clave.send_keys('clave123')
-
-        botonGrabar = self.browser.find_element_by_id('id_grabar')
+        botonGrabar = self.browser.find_element_by_id('id_editar')
+        print (botonGrabar.id)
         botonGrabar.click()
-        self.browser.implicitly_wait(3)
-        span = self.browser.find_element(By.XPATH, '//span[text()="Juan Daniel Arevalo Editado"]')
 
-        self.assertIn('Juan Daniel Arevalo Editado', span.text)
-
-
-
-
-
-
-
-
-
+        span = self.browser.find_element_by_id('username')
+        self.assertIn('Juan Daniel Editado', span.text)
