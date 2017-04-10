@@ -1,5 +1,4 @@
 # coding=utf-8
-
 from django.conf import settings
 from django.contrib import auth
 from django.contrib import messages
@@ -8,12 +7,18 @@ from django.core import serializers
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-
 from .models import TiposDeServicio, LoginForm, ComentarioForm
 from .models import Trabajador, TrabajadorForm, UserForm, Comentario
 
+def crearDesarrollador():
+    if (TiposDeServicio.objects.all().count() == 0):
+        desarrollador = TiposDeServicio()
+        desarrollador.nombre = "Desarrollador Web"
+        desarrollador.imagen = "services/wa.jpeg"
+        desarrollador.save()
 
 def index(request):
+    crearDesarrollador()
     trabajadores = Trabajador.objects.all()
     tipos_de_servicios = TiposDeServicio.objects.all()
     form_trabajador = TrabajadorForm(request.POST)
@@ -27,6 +32,7 @@ def index(request):
 
 
 def login(request):
+    crearDesarrollador()
     form_login = LoginForm()
 
     if request.method == 'POST':
@@ -53,12 +59,14 @@ def login(request):
 
 
 def logout(request):
+    crearDesarrollador()
     auth.logout(request)
     messages.info(request, "Cerraste sesión exitosamente", extra_tags="alert-info")
     return HttpResponseRedirect('/')
 
 
 def register(request):
+    crearDesarrollador()
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -84,6 +92,7 @@ def register(request):
 
 
 def editar_perfil(request, idTrabajador):
+    crearDesarrollador()
     trabajador = Trabajador.objects.get(usuarioId=idTrabajador)
     if request.method == 'POST':
         # formulario enviado
@@ -104,6 +113,7 @@ def editar_perfil(request, idTrabajador):
 
 @csrf_exempt
 def add_comment(request):
+    crearDesarrollador()
     if request.method == 'POST':
         new_comment = Comentario(texto=request.POST.get('texto'),
                                  trabajador=Trabajador.objects.get(usuarioId=request.user.id),
@@ -118,6 +128,7 @@ def add_comment(request):
 
 @csrf_exempt
 def mostrarTrabajadores(request, tipo=""):
+    crearDesarrollador()
     if tipo == "":
         lista_trabajadores = Trabajador.objects.all()
     else:
@@ -128,23 +139,28 @@ def mostrarTrabajadores(request, tipo=""):
 
 @csrf_exempt
 def mostrarTodosComentarios(request):
+    crearDesarrollador()
     lista_comentarios = Comentario.objects.all()
     return HttpResponse(serializers.serialize("json", lista_comentarios))
 
 @csrf_exempt
 def mostrarComentarios(request, idTrabajador):
+    crearDesarrollador()
     lista_comentarios = Comentario.objects.filter(trabajador=Trabajador.objects.get(pk=idTrabajador))
     return HttpResponse(serializers.serialize("json", lista_comentarios))
 
 def getTiposDeServicio(request, pk):
+    crearDesarrollador()
     tipo = TiposDeServicio.objects.get(pk=pk)
     return HttpResponse(serializers.serialize("json", [tipo]))
 
 
 def detalle_trabajador(request):
+    crearDesarrollador()
     return render(request, "polls/detalle.html")
 
 
 def detail(request, pk):
+    crearDesarrollador()
     trabajador = get_object_or_404(Trabajador, pk=pk)
     return HttpResponse(serializers.serialize("json", [trabajador]))
