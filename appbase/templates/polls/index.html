@@ -91,6 +91,7 @@
         {% endfor %}
     </div>
 {% else %}
+    <a id="id_ircomentar" href="/addComment" class="btn btn-default btn-success">Agregar comentarios</a>
     <div class="container" style="padding: 5px">
         {% if user.is_authenticated and user.is_superuser %}
             <h3>Administrar</h3>

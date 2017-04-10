@@ -1,8 +1,8 @@
 from __future__ import absolute_import
 
+import json
 import os
 from unittest import TestCase
-
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -150,8 +150,6 @@ class FunctionalTest(TestCase):
         botonIngresar = self.browser.find_element_by_id('btn_login')
         botonIngresar.submit()
 
-        time.sleep(4)
-
         self.browser.find_element_by_id('id_ircomentar').click()
 
         nombre = self.browser.find_element_by_id('id_texto')
@@ -165,5 +163,7 @@ class FunctionalTest(TestCase):
         botonGrabar = self.browser.find_element_by_id('id_guardar_comentario')
         botonGrabar.click()
 
-        span = self.browser.find_element(By.XPATH, '//span[text()="Proceso exitoso"]')
-        self.assertIn('Proceso exitoso', span.text)
+        self.browser.get("http://localhost:8000/mostrarTodosComentarios")
+        comentarios_json_lista = json.loads(self.browser.find_element_by_tag_name('body').text)
+        comentarios_json_string = " ".join(str(x) for x in comentarios_json_lista)
+        self.assertIn('Comentario de prueba', comentarios_json_string)

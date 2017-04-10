@@ -91,3 +91,19 @@ class LoginForm(ModelForm):
     class Meta:
         model = User
         fields = ['username_login', 'password_login']
+
+
+
+class ComentarioForm(ModelForm):
+    texto = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Comentario'}),
+        label='Comentario'
+    )
+    correo = forms.CharField(
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Correo electrónico'}),
+        label='Correo'
+    )
+
+    class Meta:
+        model = Comentario
+        fields = ['texto', 'correo']

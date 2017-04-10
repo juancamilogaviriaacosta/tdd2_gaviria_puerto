@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import TiposDeServicio, LoginForm
+from .models import TiposDeServicio, LoginForm, ComentarioForm
 from .models import Trabajador, TrabajadorForm, UserForm, Comentario
 
 
@@ -106,11 +106,15 @@ def editar_perfil(request, idTrabajador):
 def add_comment(request):
     if request.method == 'POST':
         new_comment = Comentario(texto=request.POST.get('texto'),
-                                 trabajador=Trabajador.objects.get(pk=request.POST.get('trabajador')),
+                                 trabajador=Trabajador.objects.get(usuarioId=request.user.id),
                                  correo=request.POST.get('correo'))
         new_comment.save()
-    return HttpResponse(serializers.serialize("json", [new_comment]))
-
+        messages.success(request, "Proceso exitoso", extra_tags="alert-success")
+        return HttpResponseRedirect('/')
+    else:
+        comentario_form = ComentarioForm()
+        context = {'comentario_form': comentario_form}
+        return render(request, 'polls/comentario.html', context)
 
 @csrf_exempt
 def mostrarTrabajadores(request, tipo=""):
@@ -123,11 +127,14 @@ def mostrarTrabajadores(request, tipo=""):
 
 
 @csrf_exempt
-def mostrarComentarios(request, idTrabajador):
-    lista_comentarios = Comentario.objects.filter(trabajador=Trabajador.objects.get(pk=idTrabajador))
-
+def mostrarTodosComentarios(request):
+    lista_comentarios = Comentario.objects.all()
     return HttpResponse(serializers.serialize("json", lista_comentarios))
 
+@csrf_exempt
+def mostrarComentarios(request, idTrabajador):
+    lista_comentarios = Comentario.objects.filter(trabajador=Trabajador.objects.get(pk=idTrabajador))
+    return HttpResponse(serializers.serialize("json", lista_comentarios))
 
 def getTiposDeServicio(request, pk):
     tipo = TiposDeServicio.objects.get(pk=pk)
