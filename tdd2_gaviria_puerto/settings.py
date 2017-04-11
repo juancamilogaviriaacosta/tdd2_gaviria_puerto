@@ -75,6 +75,11 @@ WSGI_APPLICATION = 'tdd2_gaviria_puerto.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
+#
+# PARA REALIZAR UNA CONFIGURACION RAPIDA SOLO SE DEBE DEFINIR LA SIGUIENTE VARIABLE DE ENTORNO
+#
+# export DATABASE_URL=postgres://core:core@localhost:5432/tdd2_gaviria_puerto
+
 DATABASES = {'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))}
 
 # Password validation
