@@ -10,7 +10,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import TiposDeServicio, LoginForm
-from .models import Trabajador, TrabajadorForm, UserForm, Comentario
+from .models import Trabajador, TrabajadorForm, UserForm, Comentario, ComentarioForm
 
 
 def index(request):
@@ -19,10 +19,12 @@ def index(request):
     form_trabajador = TrabajadorForm(request.POST)
     form_usuario = UserForm(request.POST)
     form_login = LoginForm(request.POST)
+    user = auth.get_user(request)
 
     context = {'trabajadores': trabajadores, 'tipos_de_servicios': tipos_de_servicios,
                'form_trabajador': form_trabajador, 'form_usuario': form_usuario, 'base_url': settings.STATIC_URL,
-               'form_login': form_login}
+               'form_login': form_login, 'usuario': user}
+
     return render(request, 'polls/index.html', context)
 
 
@@ -47,9 +49,9 @@ def login(request):
             # return HttpResponseRedirect('/')
 
     context = {'form_login': form_login,
-               'username' : username}
+               'username': username}
 
-    return render(request, 'polls/index.html', context)
+    return HttpResponseRedirect('index', context)
 
 
 def logout(request):
@@ -103,16 +105,6 @@ def editar_perfil(request, idTrabajador):
 
 
 @csrf_exempt
-def add_comment(request):
-    if request.method == 'POST':
-        new_comment = Comentario(texto=request.POST.get('texto'),
-                                 trabajador=Trabajador.objects.get(pk=request.POST.get('trabajador')),
-                                 correo=request.POST.get('correo'))
-        new_comment.save()
-    return HttpResponse(serializers.serialize("json", [new_comment]))
-
-
-@csrf_exempt
 def mostrarTrabajadores(request, tipo=""):
     if tipo == "":
         lista_trabajadores = Trabajador.objects.all()
@@ -122,22 +114,25 @@ def mostrarTrabajadores(request, tipo=""):
     return HttpResponse(serializers.serialize("json", lista_trabajadores))
 
 
-@csrf_exempt
-def mostrarComentarios(request, idTrabajador):
-    lista_comentarios = Comentario.objects.filter(trabajador=Trabajador.objects.get(pk=idTrabajador))
-
-    return HttpResponse(serializers.serialize("json", lista_comentarios))
-
-
 def getTiposDeServicio(request, pk):
     tipo = TiposDeServicio.objects.get(pk=pk)
     return HttpResponse(serializers.serialize("json", [tipo]))
 
 
-def detalle_trabajador(request):
-    return render(request, "polls/detalle.html")
-
-
-def detail(request, pk):
+def detalle_trabajador(request, pk):
+    comentario_form = ComentarioForm()
     trabajador = get_object_or_404(Trabajador, pk=pk)
-    return HttpResponse(serializers.serialize("json", [trabajador]))
+    lista_comentarios = Comentario.objects.filter(trabajador=Trabajador.objects.get(pk=trabajador.id))
+
+
+    if request.method == 'POST':
+        new_comment = Comentario(texto=request.POST.get('texto'),
+                                 trabajador=Trabajador.objects.get(pk=pk),
+                                 correo=request.POST.get('correo'))
+        new_comment.save()
+
+    context = {'lista_comentarios': lista_comentarios,
+               'comentario_form': comentario_form
+               }
+
+    return render(request, "polls/detalle.html", context)

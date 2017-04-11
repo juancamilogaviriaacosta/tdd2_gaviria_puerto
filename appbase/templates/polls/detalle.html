@@ -1,3 +1,6 @@
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,32 +22,32 @@
                     $('#nombres').prepend('<h2>' + val.fields.nombre + ' ' + val.fields.apellidos + '</h2>');
                     $('#foto').prepend('<a><img src="https://miso4202.s3.amazonaws.com/' + val.fields.imagen + '" class="media-object" style="width: 250px; height: 300px"></a>');
                     $('#detalle').prepend('<br><br><br>' +
-                            '<h4><b>Experiencia: </b>' + val.fields.aniosExperiencia + ' años</h4><br>' +
-                            '<h4><b>Telefono: </b>' + val.fields.telefono + '</h4><br>' +
-                            '<h4><b>Correo electrónico: </b>' + val.fields.correo + '</h4>');
+                        '<h4><b>Experiencia: </b>' + val.fields.aniosExperiencia + ' años</h4><br>' +
+                        '<h4><b>Telefono: </b>' + val.fields.telefono + '</h4><br>' +
+                        '<h4><b>Correo electrónico: </b>' + val.fields.correo + '</h4>');
                 })
             });
         })();
 
         mostrarComentarios();
-        function mostrarComentarios(){
+        function mostrarComentarios() {
             $.getJSON("/mostrarComentarios/" + trabajador).done(function (data) {
                 $.each(data, function (key, val) {
 
-                    var div='<div style="box-shadow: 2px 2px 5px gray; border-radius: 5px" class="col-md-6 col-md-offset-3">'+
-                                  '<h4>'+val.fields.correo+'</h4>'+
-                                  '<p>'+val.fields.texto+'</p></div>';
-                  $('#comentarios').append(div);
+                    var div = '<div style="box-shadow: 2px 2px 5px gray; border-radius: 5px" class="col-md-6 col-md-offset-3">' +
+                        '<h4>' + val.fields.correo + '</h4>' +
+                        '<p>' + val.fields.texto + '</p></div>';
+                    $('#comentarios').append(div);
                 })
             });
         }
 
 
-        function agregarComentario(){
-            $.post( "/addComment", { texto: $('#comentario').val(), trabajador: trabajador, correo: $('#correo').val() })
-              .done(function( data ) {
-                  mostrarComentarios();
-              });
+        function agregarComentario() {
+            $.post("/addComment", {texto: $('#comentario').val(), trabajador: trabajador, correo: $('#correo').val()})
+                .done(function (data) {
+                    location.reload(true);
+                });
         }
     </script>
 </head>
@@ -70,17 +73,33 @@
 </div>
 <div class="row">
     <div style="box-shadow: 2px 2px 5px gray; border-radius: 5px" class="col-md-6 col-md-offset-3">
-        <form onsubmit="agregarComentario()">
-         <input id="correo" style="margin: 5px;" type="email" required placeholder="Correo">
-         <textarea placeholder="Agreagar comentario" id="comentario" style="margin: 5px;" rows="3" cols="90" required></textarea>
-
-        <button type="submit" style="margin: 5px;" class="btn btn-default btn-success" title="Adicionar comentario">Comentar <span class="glyphicon glyphicon-plus"></span>
-        </button>
+        <form method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form comentario_form %}
+            {% buttons %}
+                <button id="id_guardar" type="submit" class="btn btn-primary">Guardar comentario</button>
+            {% endbuttons %}
         </form>
 
-     </div>
+        {% for comentario in lista_comentarios %}
+            <div style="float: left; padding:20px; width:550px; height:170px;">
+                <div style="float: left; padding:20px; width:520px; height:150px; border-style: solid; border-width: 1px; background-color: aliceblue">
+                    <h5>
+                        <b>Correo:</b>
+                        <span>{{ comentario.correo }}</span>
+                    </h5>
+                    <h5>
+                        <b>Comentario:</b>
+                        <span>{{ comentario.texto }}</span>
+                    </h5>
+                </div>
+            </div>
+            <br>
+        {% endfor %}
     </div>
-    <div id="comentarios" class="row">
+    <br>
+</div>
+
 </div>
 </body>
 </html>

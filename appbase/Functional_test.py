@@ -25,6 +25,7 @@ class FunctionalTest(TestCase):
         self.browser.get('http://localhost:8000')
         link = self.browser.find_element_by_id('id_register')
         link.click()
+        self.browser.implicitly_wait(1)
 
         nombre = self.browser.find_element_by_id('id_nombre')
         nombre.send_keys('Juan Daniel')
@@ -44,7 +45,15 @@ class FunctionalTest(TestCase):
         correo.send_keys('jd.patino1@uniandes.edu.co')
 
         imagen = self.browser.find_element_by_id('id_imagen')
-        imagen.send_keys(os.path.abspath('persona.jpg'))
+        img = os.path.join(os.path.abspath('persona.jpg'))
+
+        if os.name == 'nt':
+            img = img.replace("\\", "/")
+            imagen.send_keys(img)
+            print img
+        else:
+            imagen.send_keys(img)
+            print img
 
         nombreUsuario = self.browser.find_element_by_id('id_username')
         nombreUsuario.send_keys('juan645')
@@ -54,6 +63,7 @@ class FunctionalTest(TestCase):
 
         botonGrabar = self.browser.find_element_by_id('id_grabar')
         botonGrabar.click()
+
         self.browser.implicitly_wait(3)
         span = self.browser.find_element(By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
 
@@ -64,7 +74,7 @@ class FunctionalTest(TestCase):
         span = self.browser.find_element(By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
         span.click()
 
-        h2 = self.browser.find_element(By.XPATH, '//h2[text()="Juan Daniel Arevalo"]')
+        h2 = self.browser.find_element(By.XPATH, '//h2[text()="Comentarios"]')
 
         self.assertIn('Juan Daniel Arevalo', h2.text)
 
@@ -84,7 +94,6 @@ class FunctionalTest(TestCase):
         botonIngresar.click()
 
         label_usuario = self.browser.find_element_by_id('username')
-
         self.assertIn('Juan Daniel', label_usuario.text)
 
     def test_5_editar(self):
@@ -101,7 +110,7 @@ class FunctionalTest(TestCase):
         botonIngresar = self.browser.find_element_by_id('btn_login')
         botonIngresar.submit()
 
-        time.sleep(4)
+        time.sleep(3)
 
         self.browser.find_element_by_id('id_editar').click()
 
@@ -117,7 +126,8 @@ class FunctionalTest(TestCase):
         experiencia.clear()
         experiencia.send_keys('5')
 
-        self.browser.find_element_by_xpath("//select[@id='id_tiposDeServicio']/option[text()='Desarrollador Web']").click()
+        self.browser.find_element_by_xpath(
+            "//select[@id='id_tiposDeServicio']/option[text()='Desarrollador Web']").click()
 
         telefono = self.browser.find_element_by_id('id_telefono')
         telefono.clear()
@@ -128,11 +138,28 @@ class FunctionalTest(TestCase):
         correo.send_keys('jd.patino1@uniandes.edu.co')
 
         imagen = self.browser.find_element_by_id('id_imagen')
-        imagen.send_keys('/home/juan/Escritorio/persona.jpg')
+        imagen.send_keys('C:/Users/Asesoftware/PycharmProjects/tdd2_gaviria_puerto/appbase/persona.jpg')
 
         botonGrabar = self.browser.find_element_by_id('id_editar')
         print (botonGrabar.id)
         botonGrabar.click()
 
-        span = self.browser.find_element_by_id('username')
+        span = self.browser.find_element_by_id('nombreTrabajador')
         self.assertIn('Juan Daniel Editado', span.text)
+
+    def test_6_comentario(self):
+        self.browser.get('http://localhost:8000')
+        span = self.browser.find_element(By.XPATH, '//span[text()="Juan Daniel Editado Arevalo"]')
+        span.click()
+
+        correo = self.browser.find_element_by_id('id_correo')
+        correo.send_keys('correoprueba@dominio.com')
+
+        texto = self.browser.find_element_by_id('id_texto')
+        texto.send_keys('Comentario de prueba automatizada')
+
+        boton_guardar = self.browser.find_element_by_id('id_guardar')
+        boton_guardar.click()
+
+        comentario = self.browser.find_element(By.XPATH, '//span[text()="Comentario de prueba automatizada"]')
+        self.assertIn('Comentario de prueba automatizada', comentario.text)

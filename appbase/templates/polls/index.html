@@ -32,8 +32,9 @@
 {% include "polls/login.html" %}
 <ul class="nav navbar-nav navbar-right" style="padding-right: 20px">
     {% if user.is_authenticated %}
-        <li><span class="glyphicon glyphicon-user"></span><label id="username">{{ user.trabajador.nombre }}</label></li>
-        <li><a href="{% url 'principal:editar' idTrabajador=user.id %}" id="id_editar"><span class="glyphicon glyphicon-user"></span> Editar</a></li>
+        <li><a href="#"> <span class="glyphicon glyphicon-user" id="username">{{ user.first_name }}</span></a></li>
+        <li><a href="{% url 'principal:editar' idTrabajador=user.id %}" id="id_editar"><span
+                class="glyphicon glyphicon-user"></span> Editar</a></li>
         <li>
             <a href="logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
         </li>
@@ -57,6 +58,28 @@
         </div>
     {% endfor %}
 {% endif %}
+<div id="trabajadores">
+    {% for trabajador in trabajadores %}
+        <div class="col-sm-4 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align: center; background-color: black;">
+                    <span style="color: white; font-size: large;">{{ trabajador.tiposDeServicio.nombre }}</span>
+                    <!--suppress HtmlUnknownTarget -->
+                    <img src="/static/media/{{ trabajador.tiposDeServicio.imagen }}" width="50px" height="50px"/>
+                </div>
+                <div class="panel-body" style="text-align: center">
+                    <a class="trabajador" href="{% url 'principal:trabajador' trabajador.id %}" data-form="{{ trabajador.id }}" style="text-decoration: none;">
+                        <!--suppress HtmlUnknownTarget -->
+                        <img class="thumbnail img-responsive center-block"
+                             src="/static/media/{{ trabajador.imagen }}" width="300"
+                             height="300">
+                        <span id="nombreTrabajador">{{ trabajador.nombre }} {{ trabajador.apellidos }}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
 {% if not user.is_authenticated %}
     <form class="navbar-form navbar-right" role="search">
         <div class="input-group">
@@ -68,28 +91,7 @@
     </form>
     <div class="col-lg-12">
     </div>
-    <div id="trabajadores">
-        {% for trabajador in trabajadores %}
-            <div class="col-sm-4 col-md-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading" style="text-align: center; background-color: black;">
-                        <span style="color: white; font-size: large;">{{ trabajador.tiposDeServicio.nombre }}</span>
-                        <!--suppress HtmlUnknownTarget -->
-                        <img src="/static/media/{{ trabajador.tiposDeServicio.imagen }}" width="50px" height="50px"/>
-                    </div>
-                    <div class="panel-body" style="text-align: center">
-                        <a class="trabajador" href="#" data-form="{{ trabajador.id }}" style="text-decoration: none;">
-                            <!--suppress HtmlUnknownTarget -->
-                            <img class="thumbnail img-responsive center-block"
-                                 src="/static/media/{{ trabajador.imagen }}" width="300"
-                                 height="300">
-                            <span>{{ trabajador.nombre }} {{ trabajador.apellidos }}</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+
 {% else %}
     <div class="container" style="padding: 5px">
         {% if user.is_authenticated and user.is_superuser %}
@@ -99,6 +101,7 @@
         {% endif %}
     </div>
 {% endif %}
+
 <!--suppress JSUnresolvedFunction -->
 <script>
     $(document).ready(function () {
