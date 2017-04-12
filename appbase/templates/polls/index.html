@@ -68,7 +68,8 @@
                     <img src="/static/media/{{ trabajador.tiposDeServicio.imagen }}" width="50px" height="50px"/>
                 </div>
                 <div class="panel-body" style="text-align: center">
-                    <a class="trabajador" href="{% url 'principal:trabajador' trabajador.id %}" data-form="{{ trabajador.id }}" style="text-decoration: none;">
+                    <a class="trabajador" href="{% url 'principal:trabajador' trabajador.id %}"
+                       data-form="{{ trabajador.id }}" style="text-decoration: none;">
                         <!--suppress HtmlUnknownTarget -->
                         <img class="thumbnail img-responsive center-block"
                              src="/static/media/{{ trabajador.imagen }}" width="300"
@@ -93,7 +94,7 @@
     </div>
 
 {% else %}
-    <a id="id_ircomentar" href="/addComment" class="btn btn-default btn-success">Agregar comentarios</a>
+{#    <a id="id_ircomentar" href="/addComment" class="btn btn-default btn-success">Agregar comentarios</a>#}
     <div class="container" style="padding: 5px">
         {% if user.is_authenticated and user.is_superuser %}
             <h3>Administrar</h3>
