@@ -8,12 +8,18 @@ from django.core import serializers
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-
 from .models import TiposDeServicio, LoginForm
 from .models import Trabajador, TrabajadorForm, UserForm, Comentario, ComentarioForm
 
+def crearDesarrollador():
+    if (TiposDeServicio.objects.all().count() == 0):
+        desarrollador = TiposDeServicio()
+        desarrollador.nombre = "Desarrollador Web"
+        desarrollador.imagen = "services/wa.jpeg"
+        desarrollador.save()
 
 def index(request):
+    crearDesarrollador()
     trabajadores = Trabajador.objects.all()
     tipos_de_servicios = TiposDeServicio.objects.all()
     form_trabajador = TrabajadorForm(request.POST)

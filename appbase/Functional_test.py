@@ -50,10 +50,8 @@ class FunctionalTest(TestCase):
         if os.name == 'nt':
             img = img.replace("\\", "/")
             imagen.send_keys(img)
-            print img
         else:
             imagen.send_keys(img)
-            print img
 
         nombreUsuario = self.browser.find_element_by_id('id_username')
         nombreUsuario.send_keys('juan645')
@@ -76,7 +74,7 @@ class FunctionalTest(TestCase):
 
         h2 = self.browser.find_element(By.XPATH, '//h2[text()="Comentarios"]')
 
-        self.assertIn('Juan Daniel Arevalo', h2.text)
+        self.assertIn('Comentarios', h2.text)
 
     def test_4_login(self):
         self.browser.get('http://localhost:8000')
@@ -138,7 +136,13 @@ class FunctionalTest(TestCase):
         correo.send_keys('jd.patino1@uniandes.edu.co')
 
         imagen = self.browser.find_element_by_id('id_imagen')
-        imagen.send_keys('C:/Users/Asesoftware/PycharmProjects/tdd2_gaviria_puerto/appbase/persona.jpg')
+        img = os.path.join(os.path.abspath('persona.jpg'))
+
+        if os.name == 'nt':
+            img = img.replace("\\", "/")
+            imagen.send_keys(img)
+        else:
+            imagen.send_keys(img)
 
         botonGrabar = self.browser.find_element_by_id('id_editar')
         print (botonGrabar.id)

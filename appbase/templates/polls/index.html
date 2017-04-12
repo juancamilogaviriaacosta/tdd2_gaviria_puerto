@@ -117,7 +117,6 @@
         $('.trabajador').click(function () {
             var trabajador = $(this).data("form");
             localStorage.setItem('trabajador', trabajador);
-            window.location = "/detail";
         });
         $('.float-message').fadeTo(2000, 500).slideUp(500, function () {
             $('#success-alert').alert('close');
@@ -130,7 +129,6 @@
     });
     function detalle(id) {
         localStorage.setItem('trabajador', id);
-        window.location = "/detail";
     }
 
     function mostrarTrabajadores() {
